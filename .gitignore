@@ -4,6 +4,9 @@
 # But do not ignore .env.example files
 !**/.env.example
 
+# Ignore dist in app directory
+/app/dist/
+
 # Ignore node_modules in app directory
 /app/node_modules/
 
