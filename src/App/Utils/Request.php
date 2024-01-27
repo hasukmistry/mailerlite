@@ -112,6 +112,20 @@ class Request
     }
 
     /**
+     * Send a json response
+     *
+     * @param array $data         The data to send
+     * @param integer $statusCode The status code to send
+     *
+     * @return void
+     */
+    public function sendJsonResponse(array $data, int $statusCode = 200): void
+    {
+        http_response_code($statusCode);
+        echo json_encode($data);
+    }
+
+    /**
      * Check if requested route is defined
      *
      * @return bool
@@ -201,19 +215,5 @@ class Request
         header('HTTP/1.1 200 OK');
 
         return $this;
-    }
-
-    /**
-     * Send a json response
-     *
-     * @param array $data         The data to send
-     * @param integer $statusCode The status code to send
-     *
-     * @return void
-     */
-    protected function sendJsonResponse(array $data, int $statusCode = 200): void
-    {
-        http_response_code($statusCode);
-        echo json_encode($data);
     }
 }
