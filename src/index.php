@@ -1,5 +1,8 @@
 <?php
 require_once 'vendor/autoload.php';
 
-$controller = new App\Controllers\RestApi\RestApi();
+use App\Controllers\RestApi\RestApiController;
+use App\Utils\Request;
+
+$controller = new RestApiController(new Request());
 $controller->handleRequest();
