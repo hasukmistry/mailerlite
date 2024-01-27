@@ -14,9 +14,9 @@
         }
     },
     "scripts": {
-        "test": "phpunit --bootstrap vendor/autoload.php tests",
-        "coverage": "phpunit --bootstrap vendor/autoload.php --coverage-text tests",
-        "lint": "phpcs --standard=PSR2 src/",
-        "fix": "phpcbf --standard=PSR2 src/"
+        "test": "phpunit --bootstrap vendor/autoload.php Tests",
+        "coverage": "phpunit --bootstrap vendor/autoload.php --coverage-text Tests",
+        "lint": "phpcs",
+        "fix": "phpcbf"
     }
 }

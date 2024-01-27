@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset name="MailerLite">
+	<description>PHP CodeSniffer configuration for MailerLite.</description>
+
+	<!-- Files to check -->
+	<file>.</file>
+
+	<!-- Exclude files -->
+	<exclude-pattern>vendor/*</exclude-pattern>
+
+	<!-- Use the PSR2 coding standard -->
+	<rule ref="PSR2"/>
+
+	<!-- Show progress -->
+	<arg value="p"/>
+
+	<!-- Show sniff codes in all reports -->
+	<arg value="s"/>
+</ruleset>
