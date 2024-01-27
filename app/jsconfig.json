@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./vue",
+		"jsx": "react",
+		"paths": {
+			"@/*": ["vue/*"],
+			"@sass/*": ["sass/*"],
+		}
+	}
+}

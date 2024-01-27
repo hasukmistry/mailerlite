@@ -1,0 +1,61 @@
+{
+	"root": true,
+	"rules": {
+		"no-empty": [
+			"error",
+			{
+				"allowEmptyCatch": true
+			}
+		],
+		"eqeqeq": [
+			"error",
+			"always"
+		],
+		"valid-jsdoc": [
+			"error",
+			{
+				"preferType": {
+					"Boolean": "boolean",
+					"Number": "number",
+					"object": "Object",
+					"String": "string",
+					"array": "Array",
+					"function": "Function"
+				},
+				"prefer": {
+					"arg": "param",
+					"argument": "param",
+					"class": "constructor",
+					"return": "returns",
+					"virtual": "abstract",
+					"integer": "number"
+				},
+				"matchDescription": ".+"
+			}
+		],
+		"yoda": [
+			"error",
+			"always"
+		],
+		"one-var": [
+			"error",
+			"never"
+		],
+		"vue/multi-word-component-names": "off"
+	},
+	"extends": [
+		"plugin:vue/essential",
+		"eslint:recommended",
+		"plugin:vue/recommended",
+		"plugin:prettier/recommended"
+	],
+	"env": {
+		"node": true
+	},
+	"parser": "vue-eslint-parser",
+	"parserOptions": {
+		"parser": "babel-eslint",
+		"sourceType": "module",
+		"allowImportExportEverywhere": false
+	}
+}
