@@ -31,6 +31,12 @@ monitor-vue-logs: ## Monitor Vue Logs
 down: ## Stop Docker Environment
 	@DB_IMAGE=$(DB_IMAGE) docker compose down
 
+ssh-php: ## SSH into PHP Container
+	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php /bin/bash
+
+install-composer-dev: ## Install Composer Dev Dependencies
+	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php composer install --dev
+
 cleanup: ## Cleanup Docker Environment including Volumes
 	@DB_IMAGE=$(DB_IMAGE) docker compose down -v
 
