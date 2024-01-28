@@ -145,9 +145,14 @@ export default {
 					const formData = {
 						email: this.email,
 						name: this.name,
-						lastName: this.lastName,
+						last_name: this.lastName,
 						status: this.status ? 'active' : 'inactive',
 					};
+
+					// If last name is empty, remove it from formData
+					if (!this.lastName) {
+						delete formData.last_name;
+					}
 
 					const response = await this.createSubscriber(formData);
 
