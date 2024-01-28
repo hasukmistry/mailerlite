@@ -49,7 +49,7 @@
 								<input
 									id="name"
 									v-model="name"
-									v-validate="'required|alpha'"
+									v-validate="'required|alpha_spaces'"
 									type="text"
 									name="name"
 									class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -73,7 +73,7 @@
 								<input
 									id="lastName"
 									v-model="lastName"
-									v-validate="'alpha'"
+									v-validate="'alpha_spaces'"
 									type="text"
 									name="lastName"
 									class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -121,6 +121,13 @@ import { mapGetters, mapActions } from 'vuex';
 import Navigation from '@/components/Navigation.vue';
 import Loading from '@/components/Loading.vue';
 import Error from '@/components/Error.vue';
+import { Validator } from 'vee-validate';
+
+// Add a custom rule.
+Validator.extend('alpha_spaces', {
+	validate: (value) => /^[A-Za-z\s]*$/.test(value),
+	getMessage: (field) => field + ' may only contain alphabetic characters and spaces.',
+});
 
 export default {
 	name: 'AddSubscriber',
