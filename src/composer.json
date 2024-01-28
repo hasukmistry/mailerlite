@@ -18,5 +18,8 @@
         "coverage": "phpunit --bootstrap vendor/autoload.php --coverage-text Tests",
         "lint": "phpcs",
         "fix": "phpcbf"
+    },
+    "require": {
+        "symfony/validator": "^6.0"
     }
 }
