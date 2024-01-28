@@ -4,7 +4,8 @@ namespace App\Database\Repositories;
 
 use App\Database\Repositories\BaseRepository;
 
-class SubscriberRepository extends BaseRepository {
+class SubscriberRepository extends BaseRepository
+{
     /**
      * Get the subscriber count
      *
@@ -36,7 +37,7 @@ class SubscriberRepository extends BaseRepository {
      * @return array<array<string, mixed>> An array of subscribers, each represented as an associative array
      * @throws \PDOException
      */
-    public function getSubscribers( $page = 1, $limit = 10 ): array
+    public function getSubscribers($page = 1, $limit = 10): array
     {
         try {
             // Calculate the offset
@@ -86,7 +87,8 @@ class SubscriberRepository extends BaseRepository {
      * @return bool         True if the subscriber exists, false otherwise
      * @throws \PDOException
      */
-    public function subscriberExists($email) {
+    public function subscriberExists($email)
+    {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM subscribers WHERE email = ?');
             $stmt->execute([$email]);
