@@ -3,113 +3,158 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Database\Repositories\SubscriberRepository;
+use App\Utils\JsonResponse;
+use App\Utils\Validator;
+use Exception;
 
-class SubscriberController extends BaseController {
-	private $repository;
+class SubscriberController extends BaseController
+{
+    /**
+     * SubscriberRepository instance
+     *
+     * @var SubscriberRepository
+     */
+    protected SubscriberRepository $repository;
 
-	public function __construct() {
-		parent::__construct();
+    /**
+     * Validator instance
+     *
+     * @var Validator
+     */
+    protected Validator $validator;
 
-		$this->repository = new SubscriberRepository($this->db);
-	}
+    /**
+     * Response instance
+     *
+     * @var JsonResponse
+     */
+    protected JsonResponse $response;
 
-	protected function hasValidInputs( $data ) {
-		if ( !isset($data['email']) || !isset($data['name']) || !isset($data['status']) ) {
-			return false;
-		}
+    /**
+     * Create a new SubscriberController instance
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		if ( empty(trim($data['email'])) || empty(trim($data['name'])) || empty(trim($data['status'])) ) {
-			return false;
-		}
+        $this->repository = new SubscriberRepository($this->db);
+        $this->response   = new JsonResponse();
+        $this->validator  = new Validator();
+    }
 
-		return true;
-	}
+    /**
+     * Get the sanitized and validated input data
+     *
+     * @return array
+     */
+    protected function getInputData()
+    {
+        try {
+            // Get the input data
+            $data = json_decode(file_get_contents('php://input'), true);
 
-	private function getInputData() {
-		// Get the input data
-		$data = json_decode(file_get_contents('php://input'), true);
+            // Validate if the input data is valid
+            $this->validator->setInputData($data)
+                ->setEmailRules()
+                ->setNameRules()
+                ->setStatusRules()
+                ->setOptionalLastNameRules()
+                ->validate();
 
-		if ( ! $this->hasValidInputs( $data ) ) {
-			http_response_code(400);
-			echo json_encode(['error' => 'Email, name and status fields are required.']);
-			exit;
-		}
+            if (empty($this->validator->getValidatedData())) {
+                $this->response->sendJsonResponse(['error' => 'Email, name and status fields are required.'], 400);
+                die();
+            }
 
-		// Sanitize and validate the data
-		$email = filter_var(trim($data['email']), FILTER_SANITIZE_EMAIL);
-		
-		// htmlspecialchars function to convert special characters to their HTML entities, which can prevent XSS (Cross-Site Scripting) attacks
-		// This will convert special characters like <, >, &, ", and ' to their HTML entities (&lt;, &gt;, &amp;, &quot;, and &#039; respectively),
-		// which can prevent these characters from being interpreted as HTML tags or entities.
-		$name = htmlspecialchars(trim($data['name']), ENT_QUOTES, 'UTF-8');
-		$lastName = isset($data['last_name']) ? htmlspecialchars(trim($data['last_name']), ENT_QUOTES, 'UTF-8') : null;
-		$status = htmlspecialchars(trim($data['status']), ENT_QUOTES, 'UTF-8');
-	
-		// Validate the email
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			http_response_code(400);
-			echo json_encode(['error' => 'Please provide a valid email address.']);
-			exit;
-		}
+            if (!$this->validator->hasValidationPassed()) {
+                $this->response->sendJsonResponse(['error' => $this->validator->getValidationErrors()], 400);
+                die();
+            }
 
-		// Validate the status
-		if ( !in_array($status, ['active', 'inactive'])) {
-			http_response_code(400);
-			echo json_encode(['error' => 'Status must be active or inactive.']);
-			exit;
-		}
-	
-		return [$email, $name, $lastName, $status];
-	}
+            $email = $this->validator->getValidatedData()['email'];
+            $name = $this->validator->getValidatedData()['name'];
+            $lastName = isset($this->validator->getValidatedData()['last_name'])
+                ? $this->validator->getValidatedData()['last_name']
+                : null;
+            $status = $this->validator->getValidatedData()['status'];
+        } catch (Exception $e) {
+            $this->response->sendJsonResponse(['error' => $e->getMessage()], 400);
+            die();
+        }
+    
+        return [$email, $name, $lastName, $status];
+    }
 
-	public function createSubscriber() {
-		// Get the sanitized and validated input data
-		list($email, $name, $lastName, $status) = $this->getInputData();
-	
-		// Check if the subscriber already exists
-		if ($this->repository->subscriberExists($email)) {
-			http_response_code(409);
-			echo json_encode(['error' => 'Subscriber already exists with email ' . $email ]);
-			exit;
-		}
-	
-		// Insert the subscriber data
-		$this->repository->insertSubscriber($email, $name, $lastName, $status);
-	
-		http_response_code(201);
-		echo json_encode(['status' => 'success']);
-	}
+    /**
+     * Handles mailerlite/v1/subscriber POST request
+     * Create a new subscriber and send the json response
+     *
+     * @return void
+     */
+    public function createSubscriber()
+    {
+        try {
+            // Get the sanitized and validated input data
+            list($email, $name, $lastName, $status) = $this->getInputData();
+        
+            // Check if the subscriber already exists
+            if ($this->repository->subscriberExists($email)) {
+                $this->response->sendJsonResponse(['error' => 'Subscriber already exists with email'], 409);
+                die();
+            }
+        
+            // Insert the subscriber data
+            $this->repository->insertSubscriber($email, $name, $lastName, $status);
+        
+            $this->response->sendJsonResponse(['status' => 'success'], 201);
+        } catch (Exception $e) {
+            $this->response->sendJsonResponse(['error' => $e->getMessage()], 400);
+        }
 
-	public function getSubscribers() {
-		// Get the page number from the query string
-		$page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-		$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+        die();
+    }
 
-		// Get the subscribers
-		$subscribers = $this->repository->getSubscribers( $page, $limit );
+    /**
+     * Handles mailerlite/v1/subscribers GET request
+     * Get the subscribers and send the json response
+     * Also handles pagination
+     *
+     * @return void
+     */
+    public function getSubscribers()
+    {
+        try {
+            // Get the page number from the query string
+            $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
 
-		// Get the total count of subscribers
-		$totalSubscribers = $this->repository->getSubscriberCount();
+            // Get the subscribers
+            $subscribers = $this->repository->getSubscribers($page, $limit);
 
-		// Calculate the total pages
-		$totalPages = ceil($totalSubscribers / $limit);
+            // Get the total count of subscribers
+            $totalSubscribers = $this->repository->getSubscriberCount();
 
-		// Check if subscribers are found
-		if (count($subscribers) > 0) {
-			http_response_code(200);
-			echo json_encode([
-				'data'     => $subscribers,
-				'paginate' => [
-					'current' => $page,
-					'total'   => $totalPages,
-					'records' => (int) $totalSubscribers,
-				],
-			]);
-		} else {
-			http_response_code(404);
-			echo json_encode($subscribers);
-		}
+            // Calculate the total pages
+            $totalPages = ceil($totalSubscribers / $limit);
 
-		exit;
-	}
+            // Check if subscribers are found
+            if (count($subscribers) > 0) {
+                $this->response->sendJsonResponse([
+                    'data'     => $subscribers,
+                    'paginate' => [
+                        'current' => $page,
+                        'total'   => $totalPages,
+                        'records' => (int) $totalSubscribers,
+                    ],
+                ], 200);
+            } else {
+                $this->response->sendJsonResponse(['error' => 'No subscribers found'], 404);
+            }
+        } catch (Exception $e) {
+            $this->response->sendJsonResponse(['error' => $e->getMessage()], 400);
+        }
+
+        die();
+    }
 }
