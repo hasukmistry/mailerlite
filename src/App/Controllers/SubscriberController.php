@@ -64,12 +64,12 @@ class SubscriberController extends BaseController
 
             if (empty($this->validator->getValidatedData())) {
                 $this->response->sendJsonResponse(['error' => 'Email, name and status fields are required.'], 400);
-                die();
+                $this->response->terminateResponseStream();
             }
 
             if (! $this->validator->hasValidationPassed()) {
                 $this->response->sendJsonResponse(['error' => $this->validator->getValidationErrors()], 400);
-                die();
+                $this->response->terminateResponseStream();
             }
 
             $email = $this->validator->getValidatedData()['email'];
@@ -80,7 +80,7 @@ class SubscriberController extends BaseController
             $status = $this->validator->getValidatedData()['status'];
         } catch (Exception $e) {
             $this->response->sendJsonResponse(['error' => $e->getMessage()], 400);
-            die();
+            $this->response->terminateResponseStream();
         }
     
         return [$email, $name, $lastName, $status];
@@ -97,11 +97,11 @@ class SubscriberController extends BaseController
         try {
             // Get the sanitized and validated input data
             list($email, $name, $lastName, $status) = $this->getInputData();
-        
+
             // Check if the subscriber already exists
             if ($this->repository->subscriberExists($email)) {
                 $this->response->sendJsonResponse(['error' => 'Subscriber already exists with email'], 409);
-                die();
+                $this->response->terminateResponseStream();
             }
         
             // Insert the subscriber data
@@ -112,7 +112,7 @@ class SubscriberController extends BaseController
             $this->response->sendJsonResponse(['error' => $e->getMessage()], 400);
         }
 
-        die();
+        $this->response->terminateResponseStream();
     }
 
     /**
@@ -155,6 +155,6 @@ class SubscriberController extends BaseController
             $this->response->sendJsonResponse(['error' => $e->getMessage()], 400);
         }
 
-        die();
+        $this->response->terminateResponseStream();
     }
 }

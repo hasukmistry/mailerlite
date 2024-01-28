@@ -45,4 +45,14 @@ class JsonResponse
         http_response_code($statusCode);
         echo json_encode($data);
     }
+
+    /**
+     * Terminate the response stream
+     *
+     * @return void
+     */
+    public function terminateResponseStream()
+    {
+        exit();
+    }
 }

@@ -73,24 +73,24 @@ class Request
 
         if (! $this->isRouteDefined()) {
             $this->response->sendJsonResponse(['error' => 'Not found'], 404);
-            die();
+            $this->response->terminateResponseStream();
         }
 
         if (! $this->isMethodDefined()) {
             $this->response->sendJsonResponse(['error' => 'Method not allowed'], 405);
-            die();
+            $this->response->terminateResponseStream();
         }
 
         // If the request method is OPTIONS, just exit - This will allow CORS to work on the preflight request
         if ($this->isOptionsRequest()) {
             $this->response->setPreflightResponseHeaders();
-            die();
+            $this->response->terminateResponseStream();
         }
 
         // This should be handle after the preflight request
         if (! $this->isRequestMethodAllowed()) {
             $this->response->sendJsonResponse(['error' => 'Method not allowed'], 405);
-            die();
+            $this->response->terminateResponseStream();
         }
 
         // lets create an instance of given controller class in the callback
