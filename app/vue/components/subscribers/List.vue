@@ -1,8 +1,10 @@
 <template>
 	<div>
 		<Navigation />
+
 		<div class="flex flex-col w-full justify-center items-center">
 			<Loading v-if="isLoading" message="Please wait, fetching subscribers..." />
+
 			<div v-else class="flex flex-col px-2 md:px-24 w-[100%] md:size-full">
 				<h1 class="font-bold text-amber-600 text-lg py-5 text-center">Subscribers</h1>
 
@@ -68,14 +70,14 @@ export default {
 	},
 	watch: {
 		$route: function () {
-			this.paginate();
+			this.loadSubscribers();
 		},
 	},
 	created() {
-		this.paginate();
+		this.loadSubscribers();
 	},
 	mounted() {
-		// unset all the alrets
+		// unset the alert after 5 seconds
 		setTimeout(() => {
 			this.$store.commit('subscribers/list/SET_ALERT', null);
 		}, 5000);
@@ -83,7 +85,7 @@ export default {
 	methods: {
 		...mapActions('subscribers/list', ['fetchSubscribers']),
 		get,
-		paginate() {
+		loadSubscribers() {
 			let payload = {};
 			const { params } = this.$route;
 			if ('undefined' === typeof params.page) {
@@ -110,5 +112,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped></style>
