@@ -85,12 +85,12 @@ class Request
     {
         $this->response->setResponseHeaders();
 
-        if (!$this->isRouteDefined()) {
+        if (! $this->isRouteDefined()) {
             $this->response->sendJsonResponse(['error' => 'Not found'], 404);
             die();
         }
 
-        if (!$this->isMethodDefined()) {
+        if (! $this->isMethodDefined()) {
             $this->response->sendJsonResponse(['error' => 'Method not allowed'], 405);
             die();
         }
@@ -102,7 +102,7 @@ class Request
         }
 
         // This should be handle after the preflight request
-        if (!$this->isRequestMethodAllowed()) {
+        if (! $this->isRequestMethodAllowed()) {
             $this->response->sendJsonResponse(['error' => 'Method not allowed'], 405);
             die();
         }

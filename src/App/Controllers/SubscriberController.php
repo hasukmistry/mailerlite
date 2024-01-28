@@ -67,7 +67,7 @@ class SubscriberController extends BaseController
                 die();
             }
 
-            if (!$this->validator->hasValidationPassed()) {
+            if (! $this->validator->hasValidationPassed()) {
                 $this->response->sendJsonResponse(['error' => $this->validator->getValidationErrors()], 400);
                 die();
             }
