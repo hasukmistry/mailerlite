@@ -17,3 +17,15 @@
 /logs/
 
 .DS_Store
+
+# Ignore coverage directory
+/src/coverage/
+
+# Ignore .idea directory
+/.idea/
+
+# Ignore .vscode directory
+/.vscode/
+
+# Ignore phpunit cache
+/.phpunit.result.cache
