@@ -1,18 +1,22 @@
 <template>
 	<div>
 		<Navigation />
+
 		<div class="flex flex-col w-full justify-center items-start">
 			<div v-if="isLoading" class="py-10 px-2 md:px-14">
 				<Loading message="Please wait, creating subscriber..." />
 			</div>
+
 			<div v-else class="flex flex-col pt-4 px-2 md:px-24 w-[100%] md:size-full">
 				<div class="max-w-lg p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50" role="alert">
 					<span class="font-medium">Info alert!</span>
 					You can add your subscriber here. Make sure to enter valid email address.
 				</div>
+
 				<div v-if="getError" class="max-w-lg text-sm text-blue-800 rounded-lg">
 					<Error :message="getError" />
 				</div>
+
 				<form class="flex flex-col max-w-lg" @submit.prevent="submitForm">
 					<div class="py-5 mb-5">
 						<div class="relative z-0 w-full group">
@@ -38,6 +42,7 @@
 							{{ errors.first('email') }}
 						</span>
 					</div>
+
 					<div class="grid md:grid-cols-2 md:gap-6">
 						<div class="py-5">
 							<div class="relative z-0 w-full mb-5 group">
@@ -86,6 +91,7 @@
 							</div>
 						</div>
 					</div>
+
 					<div class="grid md:grid-cols-2 md:gap-6 py-5">
 						<div class="relative z-0 w-full mb-5 group">
 							<label class="relative inline-flex items-center mb-5 cursor-pointer">
@@ -97,6 +103,7 @@
 							</label>
 						</div>
 					</div>
+
 					<button
 						type="submit"
 						class="max-w-xs text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
@@ -166,5 +173,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped></style>
