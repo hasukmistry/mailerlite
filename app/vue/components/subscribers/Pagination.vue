@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import get from 'lodash/get';
 import Paginate from 'vuejs-paginate';
 
 export default {
@@ -33,7 +32,6 @@ export default {
 		this.page = this.pagination.current;
 	},
 	methods: {
-		get,
 		pageChanged(pageNumber) {
 			this.$emit('page-changed', pageNumber);
 		},
