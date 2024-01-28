@@ -7,9 +7,17 @@ BASE_DIR 	  := $(shell pwd | xargs basename)
 # image: mariadb:10.2
 DB_IMAGE      := $(shell if [ "$(shell uname -s)" = "Darwin" ]; then echo "mariadb:10.2"; else echo "mysql:5.7"; fi)
 
-fresh: down ## Make Fresh Docker Setup Based on OS Environment
+env:
+	@if [ ! -f .env ]; then cp .env.example .env; fi
+	@if [ ! -f ./app/.env ]; then cp ./app/.env.example ./app/.env; fi
+
+fresh: env down ## Make Fresh Docker Setup Based on OS Environment
 	@echo "Using $(DB_IMAGE) as database image"
 	@DB_IMAGE=$(DB_IMAGE) docker compose up --build -d
+
+start: down ## Start Docker Environment
+	@echo "Using $(DB_IMAGE) as database image"
+	@DB_IMAGE=$(DB_IMAGE) docker compose up -d
 
 check-vue-ready: ## Check if Vue.js application is ready
 	@echo "Checking if Vue.js application is ready..."
