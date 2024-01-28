@@ -87,7 +87,7 @@ class SubscriberRepository extends BaseRepository
      * @return bool         True if the subscriber exists, false otherwise
      * @throws \PDOException
      */
-    public function subscriberExists($email)
+    public function subscriberExists($email): bool
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM subscribers WHERE email = ?');
