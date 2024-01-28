@@ -31,7 +31,7 @@ export default {
 
 				const response = await this._vm.$http
 					.get(listApiUrl)
-					.query({ page: payload.page })
+					.query({ page: payload.page, limit: perPage })
 					.then((response) => response)
 					.catch((error) => {
 						console.error(error);
