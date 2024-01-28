@@ -10,7 +10,7 @@ class Connection
      * PDO instance
      *
      */
-    private $pdo;
+    protected $pdo;
 
     /**
      * Create a new Connection instance
