@@ -35,6 +35,13 @@ class Request
     protected string $parsedRequestPath = '';
 
     /**
+     * Response instance
+     *
+     * @var JsonResponse
+     */
+    protected JsonResponse $response;
+
+    /**
      * Create a new Request instance
      *
      */
@@ -43,6 +50,7 @@ class Request
         $this->restRoutes    = Routes::getRoutes();
         $this->requestPath   = trim($_SERVER['PATH_INFO'], '/');
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
+        $this->response      = new JsonResponse();
     }
 
     /**
@@ -55,7 +63,6 @@ class Request
         // Current routes configuration do not have query string based matching
         // So we should remove the query string from the requested path
         $this->mayBeRemoveQueryString()
-            ->setResponseHeaders()
             ->handleRoute();
     }
 
@@ -76,25 +83,27 @@ class Request
      */
     protected function handleRoute(): void
     {
+        $this->response->setResponseHeaders();
+
         if (!$this->isRouteDefined()) {
-            $this->sendJsonResponse(['error' => 'Not found'], 404);
+            $this->response->sendJsonResponse(['error' => 'Not found'], 404);
             die();
         }
 
         if (!$this->isMethodDefined()) {
-            $this->sendJsonResponse(['error' => 'Method not allowed'], 405);
+            $this->response->sendJsonResponse(['error' => 'Method not allowed'], 405);
             die();
         }
 
         // If the request method is OPTIONS, just exit - This will allow CORS to work on the preflight request
         if ($this->isOptionsRequest()) {
-            $this->setPreflightResponse();
+            $this->response->setPreflightResponseHeaders();
             die();
         }
 
         // This should be handle after the preflight request
         if (!$this->isRequestMethodAllowed()) {
-            $this->sendJsonResponse(['error' => 'Method not allowed'], 405);
+            $this->response->sendJsonResponse(['error' => 'Method not allowed'], 405);
             die();
         }
 
@@ -109,20 +118,6 @@ class Request
 
         // call the callback
         call_user_func([$controller, $controllerMethod]);
-    }
-
-    /**
-     * Send a json response
-     *
-     * @param array $data         The data to send
-     * @param integer $statusCode The status code to send
-     *
-     * @return void
-     */
-    public function sendJsonResponse(array $data, int $statusCode = 200): void
-    {
-        http_response_code($statusCode);
-        echo json_encode($data);
     }
 
     /**
@@ -186,33 +181,6 @@ class Request
             // If it doesn't, return the original URL
             $this->parsedRequestPath = $this->requestPath;
         }
-
-        return $this;
-    }
-
-    /**
-     * Set the response headers for the API request
-     *
-     * @return self
-     */
-    protected function setResponseHeaders(): self
-    {
-        header('Content-Type: application/json');
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-        return $this;
-    }
-
-    /**
-     * Set the headers for the preflight request
-     *
-     * @return self
-     */
-    protected function setPreflightResponse(): self
-    {
-        header('HTTP/1.1 200 OK');
 
         return $this;
     }
