@@ -19,6 +19,9 @@ start: down ## Start Docker Environment
 	@echo "Using $(DB_IMAGE) as database image"
 	@DB_IMAGE=$(DB_IMAGE) docker compose up -d
 
+ps: ## List Docker Containers
+	@DB_IMAGE=$(DB_IMAGE) docker compose ps
+
 check-vue-ready: ## Check if Vue.js application is ready
 	@echo "Checking if Vue.js application is ready..."
 	@until curl --silent --output /dev/null http://localhost:8080; do \
@@ -44,6 +47,10 @@ ssh-php: ## SSH into PHP Container
 
 install-composer-dev: ## Install Composer Dev Dependencies
 	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php composer install --dev
+
+generate-test-report: install-composer-dev ## Generate Test Report
+	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php vendor/bin/phpunit --coverage-html ./coverage
+	@echo "Test report generated at ./src/coverage/index.html"
 
 cleanup: ## Cleanup Docker Environment including Volumes
 	@DB_IMAGE=$(DB_IMAGE) docker compose down -v
