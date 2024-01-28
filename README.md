@@ -64,8 +64,10 @@ monitor-db-logs           Monitor DB Logs
 monitor-vue-logs          Monitor Vue Logs
 down                      Stop Docker Environment
 ssh-php                   SSH into PHP Container
+ssh-mysql                 SSH into Mysql Container
 install-composer-dev      Install Composer Dev Dependencies
 generate-test-report      Generate Test Report
+seed-subscribers          Insert fake subscribers into database
 cleanup                   Cleanup Docker Environment including Volumes
 ```
 
