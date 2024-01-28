@@ -62,7 +62,7 @@ class Request
     {
         // Current routes configuration do not have query string based matching
         // So we should remove the query string from the requested path
-        $this->mayBeRemoveQueryString()
+        $this->mayBeRemoveQueryStringFromRequestPath()
             ->handleRoute();
     }
 
@@ -169,7 +169,7 @@ class Request
      *
      * @return self
      */
-    protected function mayBeRemoveQueryString(): self
+    protected function mayBeRemoveQueryStringFromRequestPath(): self
     {
         // Parse the URL into its components
         $parsedUrl = parse_url($this->requestPath);
