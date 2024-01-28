@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests;
+namespace Tests\Utils;
 
 use App\Utils\Request;
 use App\Utils\JsonResponse;
 use PHPUnit\Framework\TestCase;
 
-class RequestUtilsTest extends TestCase
+class RequestTest extends TestCase
 {
     protected function setUp(): void
     {
