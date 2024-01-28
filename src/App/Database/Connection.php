@@ -9,7 +9,6 @@ class Connection
     /**
      * PDO instance
      *
-     * @var mixed
      */
     private $pdo;
 
@@ -30,9 +29,8 @@ class Connection
     /**
      * Get the PDO instance
      *
-     * @return mixed
      */
-    public function getPdo(): mixed
+    public function getPdo()
     {
         return $this->pdo;
     }

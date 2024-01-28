@@ -8,7 +8,6 @@ class BaseController
     /**
      * Database instance
      *
-     * @var mixed
      */
     protected $db;
 

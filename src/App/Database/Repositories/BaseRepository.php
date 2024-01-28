@@ -9,7 +9,6 @@ class BaseRepository
     /**
      * PDO instance
      *
-     * @var mixed
      */
     protected $pdo;
 
