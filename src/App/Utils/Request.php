@@ -7,13 +7,6 @@ use ReflectionMethod;
 class Request
 {
     /**
-     * The defined routes for the rest api
-     *
-     * @var array
-     */
-    protected array $restRoutes;
-
-    /**
      * Request path
      *
      * @var string
@@ -35,22 +28,15 @@ class Request
     protected string $parsedRequestPath = '';
 
     /**
-     * Response instance
-     *
-     * @var JsonResponse
-     */
-    protected JsonResponse $response;
-
-    /**
      * Create a new Request instance
      *
      */
-    public function __construct()
-    {
-        $this->restRoutes    = Routes::getRoutes();
+    public function __construct(
+        protected array $restRoutes,
+        protected JsonResponse $response
+    ) {
         $this->requestPath   = trim($_SERVER['PATH_INFO'], '/');
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
-        $this->response      = new JsonResponse();
     }
 
     /**
