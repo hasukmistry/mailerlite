@@ -46,9 +46,9 @@ class SubscriberController extends BaseController
     /**
      * Get the sanitized and validated input data
      *
-     * @return array
+     * @return array|null
      */
-    protected function getInputData()
+    protected function getInputData(): ?array
     {
         try {
             // Get the input data
@@ -92,7 +92,7 @@ class SubscriberController extends BaseController
      *
      * @return void
      */
-    public function createSubscriber()
+    public function createSubscriber(): void
     {
         try {
             // Get the sanitized and validated input data
@@ -122,7 +122,7 @@ class SubscriberController extends BaseController
      *
      * @return void
      */
-    public function getSubscribers()
+    public function getSubscribers(): void
     {
         try {
             // Get the page number from the query string
