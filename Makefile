@@ -45,12 +45,18 @@ down: ## Stop Docker Environment
 ssh-php: ## SSH into PHP Container
 	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php /bin/bash
 
+ssh-mysql: ## SSH into Mysql Container
+	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it db /bin/bash
+
 install-composer-dev: ## Install Composer Dev Dependencies
 	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php composer install --dev
 
 generate-test-report: install-composer-dev ## Generate Test Report
 	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php vendor/bin/phpunit --coverage-html ./coverage
 	@echo "Test report generated at ./src/coverage/index.html"
+
+seed-subscribers: install-composer-dev ## Insert fake subscribers into database
+	@DB_IMAGE=$(DB_IMAGE) docker compose exec -it php php seeders/SubscriberSeeder.php
 
 cleanup: ## Cleanup Docker Environment including Volumes
 	@DB_IMAGE=$(DB_IMAGE) docker compose down -v
