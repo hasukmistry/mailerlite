@@ -7,6 +7,8 @@
 
 	<!-- Exclude files -->
 	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>coverage/*</exclude-pattern>
+	<exclude-pattern>seeders/*</exclude-pattern>
 
 	<!-- Use the PSR2 coding standard -->
 	<rule ref="PSR2"/>
