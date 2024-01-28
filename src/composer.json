@@ -15,7 +15,7 @@
     },
     "scripts": {
         "test": "phpunit --bootstrap vendor/autoload.php Tests",
-        "coverage": "phpunit --bootstrap vendor/autoload.php --coverage-text Tests",
+        "coverage": "phpunit --coverage-html ./coverage",
         "lint": "phpcs",
         "fix": "phpcbf"
     },
