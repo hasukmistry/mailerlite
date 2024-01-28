@@ -11,6 +11,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./App/</directory>
+            <exclude>
+                <directory suffix=".php">./seeders</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
