@@ -8,6 +8,7 @@ services:
       - ./.env:/var/www/html/.env
       - ./src:/var/www/html
       - ./logs:/var/log
+      - ./xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     ports:
       - "8000:80"
     links:

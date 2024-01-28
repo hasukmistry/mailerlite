@@ -42,6 +42,41 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-install zip pdo_mysql && \
     rm -rf /var/lib/apt/lists/*
 
+# Install missing dependencies for Xdebug and PHPDBG
+RUN apt-get update && apt-get install -y \
+    curl \
+    sudo \
+    libbz2-dev \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libmcrypt-dev \
+    libreadline-dev \
+    g++ \
+    libicu-dev \
+    libonig-dev \
+    libzip-dev \
+    zlib1g-dev \
+    libpng-dev \
+    libxml2-dev \
+    && docker-php-ext-install -j$(nproc) iconv \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) intl \
+    && docker-php-ext-install -j$(nproc) pdo_mysql \
+    && docker-php-ext-install -j$(nproc) zip \
+    && docker-php-ext-install -j$(nproc) soap \
+    && docker-php-ext-install -j$(nproc) bcmath \
+    && docker-php-ext-install -j$(nproc) opcache \
+    && pecl install mcrypt-1.0.4 \
+    && docker-php-ext-enable mcrypt \
+    && pecl install -o -f redis \
+    && docker-php-ext-enable redis \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Xdebug
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
 # Set /var/www/html as the working directory
 WORKDIR /var/www/html
 
