@@ -26,7 +26,7 @@ export default {
 					.send(payload)
 					.then((response) => response)
 					.catch((error) => {
-						if (error.response && error.response.body) {
+						if (error?.response?.body) {
 							// legit error from API
 							commit('SET_ERROR', error.response.body);
 						} else {
@@ -36,7 +36,6 @@ export default {
 					});
 
 				createStatus = get(response, 'status') || null;
-				console.log(createStatus);
 			} catch (error) {
 				console.error(error);
 			} finally {
