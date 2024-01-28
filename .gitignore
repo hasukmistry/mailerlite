@@ -15,3 +15,5 @@
 
 # Ignore logs directory
 /logs/
+
+.DS_Store
