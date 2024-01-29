@@ -23,7 +23,7 @@ fresh-build: env down
 	@echo "Using $(DB_IMAGE) as database image"
 	@DB_IMAGE=$(DB_IMAGE) docker compose up --build -d
 
-fresh: fresh-build open-vue-app ## Make Fresh Docker Setup Based on OS Environment
+fresh: fresh-build seed-subscribers open-vue-app ## Make Fresh Docker Setup Based on OS Environment
 
 start: down ## Start Docker Environment
 	@echo "Using $(DB_IMAGE) as database image"
