@@ -7,9 +7,9 @@ cd /app
 echo "Installing npm dependencies. This may take a few minutes..."
 
 # Install npm dependencies
-npm install --silent --no-progress
+npm install
 
-npm install -g serve --silent --no-progress
+npm install -g serve
 
 # Run npm start
 echo "Starting the application..."
