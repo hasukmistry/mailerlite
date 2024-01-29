@@ -51,7 +51,28 @@ Before you begin, ensure you have met the following requirements:
 ```
 make fresh
 ```
+
 `make fresh` command will select the required database image based on the operating system you are using. It will also copy the required environment files.
+
+Make sure that locally 8000, 3306, and 8080 are not in use. The app relies on these ports to be available. Fresh installation will set up `node_modules`, and `composer packages`. It also has `build scripts` in place.
+
+Once you execute `make fresh`, Kindly monitor running services via `make ps`. 
+
+You may run `make check-vue-ready` to validate the status of the frontend application.
+
+This command will continue logging the following messages on the screen.
+```
+Checking if Vue.js application is ready...
+Waiting for Vue.js application...
+Waiting for Vue.js application...
+Waiting for Vue.js application...
+```
+Once the app is ready it will log the following message on the screen.
+```
+Checking if Vue.js application is ready...
+Waiting for Vue.js application...
+Vue.js application is ready.
+```
 
 #### Other useful make commands
 ```
@@ -88,13 +109,6 @@ DB_IMAGE=mariadb:10.2 docker compose up --build -d
 ```
 DB_IMAGE=mysql:5.7 docker compose up --build -d
 ```
-
-### Note:
-Fresh installation will set up `node_modules`, and `composer packages`. It also has `build scripts` in place.
-
-Once you execute `make fresh`, Kindly monitor running services via `make ps`. 
-
-You may run `make check-vue-ready` to validate the status of frontend application.
 
 ## Usage
 
