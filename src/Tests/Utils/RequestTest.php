@@ -18,11 +18,15 @@ class RequestTest extends TestCase
     public function testIsOptionsRequest()
     {
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
-        $request = new Request([], new JsonResponse());
+        $request = new Request();
+        $request->setRoutes([]);
+        $request->setResponse(new JsonResponse());
         $this->assertTrue($request->isOptionsRequest());
     
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $request = new Request([], new JsonResponse());
+        $request = new Request();
+        $request->setRoutes([]);
+        $request->setResponse(new JsonResponse());
         $this->assertFalse($request->isOptionsRequest());
     }
 
@@ -69,7 +73,9 @@ class RequestTest extends TestCase
                 echo json_encode($data);
             }));
 
-        $request = new Request($restRoutes, $jsonResponseMock);
+        $request = new Request();
+        $request->setRoutes($restRoutes);
+        $request->setResponse($jsonResponseMock);
 
         // Get the reflection class
         $reflection = new \ReflectionClass(Request::class);

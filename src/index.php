@@ -7,15 +7,20 @@ use App\Utils\Request;
 use App\Utils\Routes;
 
 // Create a new request instance
-$request = new Request(
-    Routes::getRoutes(),
+$request = new Request();
+
+// configure the routes
+$request->setRoutes(
+    Routes::getRoutes()
+);
+
+// Set the response
+$request->setResponse(
     new JsonResponse()
 );
 
 // Create a new rest api controller instance
-$controller = new RestApiController(
-    $request
-);
+$controller = new RestApiController();
 
 // Handle the rest api request
-$controller->handleRequest();
+$controller->handleRequest($request);

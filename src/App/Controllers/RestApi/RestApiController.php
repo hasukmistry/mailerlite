@@ -7,20 +7,20 @@ use App\Utils\Request;
 class RestApiController
 {
     /**
-     * Create a new RestApiController instance
+     * Request instance
      *
+     * @var Request
      */
-    public function __construct(protected Request $request)
-    {
-    }
+    protected Request $request;
 
     /**
      * Handle the rest api request
      *
      * @return void
      */
-    public function handleRequest(): void
+    public function handleRequest(Request $request): void
     {
+        $this->request = $request;
         $this->request->run();
     }
 }

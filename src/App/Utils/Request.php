@@ -7,6 +7,13 @@ use ReflectionMethod;
 class Request
 {
     /**
+     * Rest routes
+     *
+     * @var array
+     */
+    protected array $restRoutes;
+
+    /**
      * Request path
      *
      * @var string
@@ -28,15 +35,32 @@ class Request
     protected string $parsedRequestPath = '';
 
     /**
+     * Json Response instance
+     *
+     * @var JsonResponse
+     */
+    protected JsonResponse $response;
+
+    /**
      * Create a new Request instance
      *
      */
-    public function __construct(
-        protected array $restRoutes,
-        protected JsonResponse $response
-    ) {
+    public function __construct()
+    {
         $this->requestPath   = trim($_SERVER['PATH_INFO'], '/');
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
+    }
+
+    public function setRoutes(array $routes): self
+    {
+        $this->restRoutes = $routes;
+        return $this;
+    }
+
+    public function setResponse(JsonResponse $response): self
+    {
+        $this->response = $response;
+        return $this;
     }
 
     /**
