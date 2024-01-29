@@ -71,9 +71,17 @@ class SubscriberRepository extends BaseRepository
     public function insertSubscriber($email, $name, $lastName, $status): bool
     {
         try {
+            // Begin the transaction
+            $this->pdo->beginTransaction();
+
             $stmt = $this->pdo->prepare('INSERT INTO subscribers (email, name, last_name, status) VALUES (?, ?, ?, ?)');
-            return $stmt->execute([$email, $name, $lastName, $status]);
+            $stmt->execute([$email, $name, $lastName, $status]);
+
+            return $this->pdo->commit();
         } catch (\PDOException $e) {
+            // Rollback the transaction
+            $this->pdo->rollBack();
+
             error_log($e->getMessage());
             throw $e;
         }
