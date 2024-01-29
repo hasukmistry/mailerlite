@@ -1,6 +1,14 @@
 .DEFAULT_GOAL := help
 BASE_DIR 	  := $(shell pwd | xargs basename)
 
+define launch_browser
+    case `uname` in \
+        Darwin) open $(1) ;; \
+        Linux) xdg-open $(1) ;; \
+        CYGWIN*|MINGW32*|MSYS*) start $(1) ;; \
+    esac
+endef
+
 # MariaDB version 10.2 is equivalent to MySQL 5.7, 
 # mysql:5.7 does not have a version available for the linux/arm64/v8 platform
 # image: mysql:5.7
@@ -11,9 +19,11 @@ env:
 	@if [ ! -f .env ]; then cp .env.example .env; fi
 	@if [ ! -f ./app/.env ]; then cp ./app/.env.example ./app/.env; fi
 
-fresh: env down ## Make Fresh Docker Setup Based on OS Environment
+fresh-build: env down
 	@echo "Using $(DB_IMAGE) as database image"
 	@DB_IMAGE=$(DB_IMAGE) docker compose up --build -d
+
+fresh: fresh-build open-vue-app ## Make Fresh Docker Setup Based on OS Environment
 
 start: down ## Start Docker Environment
 	@echo "Using $(DB_IMAGE) as database image"
@@ -30,14 +40,8 @@ check-vue-ready: ## Check if Vue.js application is ready
 	done
 	@echo "Vue.js application is ready."
 
-open-vue-app-mac: check-vue-ready ## Open Vue.js application in browser (Mac)
-	@open http://localhost:8080
-
-open-vue-app-windows: check-vue-ready ## Open Vue.js application in browser (Windows)
-	@start http://localhost:8080
-
-open-vue-app-others: check-vue-ready ## Open Vue.js application in browser (Others)
-	@xdg-open http://localhost:8080
+open-vue-app: check-vue-ready ## Open Vue.js Application
+	@$(call launch_browser,http://localhost:8080)
 
 monitor-php-logs: ## Monitor PHP Logs
 	@DB_IMAGE=$(DB_IMAGE) docker compose logs -f php
