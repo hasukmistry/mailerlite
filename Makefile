@@ -30,6 +30,15 @@ check-vue-ready: ## Check if Vue.js application is ready
 	done
 	@echo "Vue.js application is ready."
 
+open-vue-app-mac: check-vue-ready ## Open Vue.js application in browser (Mac)
+	@open http://localhost:8080
+
+open-vue-app-windows: check-vue-ready ## Open Vue.js application in browser (Windows)
+	@start http://localhost:8080
+
+open-vue-app-others: check-vue-ready ## Open Vue.js application in browser (Others)
+	@xdg-open http://localhost:8080
+
 monitor-php-logs: ## Monitor PHP Logs
 	@DB_IMAGE=$(DB_IMAGE) docker compose logs -f php
 
