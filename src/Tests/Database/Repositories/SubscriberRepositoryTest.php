@@ -80,9 +80,12 @@ class SubscriberRepositoryTest extends TestCase
         $this->assertEquals($testSubscribers, $this->subscriberRepository->getSubscribers());
     }
 
-    public function testInsertSubscriber()
+    public function testInsertSubscriberWithTransaction()
     {
         $this->stmt = $this->createMock(PDOStatement::class);
+
+        $this->pdo->expects($this->once())
+            ->method('beginTransaction');
 
         $this->pdo->expects($this->once())
             ->method('prepare')
@@ -92,9 +95,38 @@ class SubscriberRepositoryTest extends TestCase
             ->method('execute')
             ->willReturn(true);
 
+        $this->pdo->expects($this->once())
+            ->method('commit')
+            ->willReturn(true);
+
         $this->assertTrue(
             $this->subscriberRepository->insertSubscriber('test@dummy.com', 'Test User', 'User', 'active')
         );
+    }
+
+    public function testInsertSubscriberWithFailedTransaction()
+    {
+        $this->stmt = $this->createMock(PDOStatement::class);
+
+        $this->pdo->expects($this->once())
+            ->method('beginTransaction');
+
+        $this->pdo->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->stmt);
+
+        $this->stmt->expects($this->once())
+            ->method('execute')
+            ->willThrowException(new \PDOException('Failed to insert subscriber'));
+
+        $this->pdo->expects($this->once())
+            ->method('rollBack')
+            ->willReturn(true);
+
+        $this->expectException(\PDOException::class);
+        $this->expectExceptionMessage('Failed to insert subscriber');
+
+        $this->subscriberRepository->insertSubscriber('test@dummy.com', 'Test User', 'User', 'active');
     }
 
     public function testSubscriberExists()
