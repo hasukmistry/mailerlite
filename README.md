@@ -60,7 +60,7 @@ Once you execute `make fresh`, Kindly monitor running services via `make ps`.
 
 You may run `make check-vue-ready` to validate the status of the frontend application.
 
-This command will continue logging the following messages on the screen.
+This command will continue logging the following messages on the screen till app gets ready.
 ```
 Checking if Vue.js application is ready...
 Waiting for Vue.js application...
