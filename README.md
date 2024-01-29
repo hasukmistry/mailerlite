@@ -74,12 +74,19 @@ Waiting for Vue.js application...
 Vue.js application is ready.
 ```
 
+#### Open Vue APP
+
+Depending on your OS run either `open-vue-app-mac`, `open-vue-app-windows` or `open-vue-app-others`. It will automatically open the app in the browser once it's in a ready state.
+
 #### Other useful make commands
 ```
 fresh                     Make Fresh Docker Setup Based on OS Environment
 start                     Start Docker Environment
 ps                        List Docker Containers
 check-vue-ready           Check if Vue.js application is ready
+open-vue-app-mac          Open Vue.js application in browser (Mac)
+open-vue-app-windows      Open Vue.js application in browser (Windows)
+open-vue-app-others       Open Vue.js application in browser (Others)
 monitor-php-logs          Monitor PHP Logs
 monitor-db-logs           Monitor DB Logs
 monitor-vue-logs          Monitor Vue Logs
