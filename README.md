@@ -56,11 +56,9 @@ make fresh
 
 Make sure that locally 8000, 3306, and 8080 are not in use. The app relies on these ports to be available. Fresh installation will set up `node_modules`, and `composer packages`. It also has `build scripts` in place.
 
-Once you execute `make fresh`, Kindly monitor running services via `make ps`. 
+Once the build process is done, 
 
-You may run `make check-vue-ready` to validate the status of the frontend application.
-
-This command will continue logging the following messages on the screen till app gets ready.
+It will continue logging the following messages on the screen till app gets ready.
 ```
 Checking if Vue.js application is ready...
 Waiting for Vue.js application...
@@ -74,19 +72,13 @@ Waiting for Vue.js application...
 Vue.js application is ready.
 ```
 
-#### Open Vue APP
-
-Depending on your OS run either `open-vue-app-mac`, `open-vue-app-windows` or `open-vue-app-others`. It will automatically open the app in the browser once it's in a ready state.
-
 #### Other useful make commands
 ```
 fresh                     Make Fresh Docker Setup Based on OS Environment
 start                     Start Docker Environment
 ps                        List Docker Containers
 check-vue-ready           Check if Vue.js application is ready
-open-vue-app-mac          Open Vue.js application in browser (Mac)
-open-vue-app-windows      Open Vue.js application in browser (Windows)
-open-vue-app-others       Open Vue.js application in browser (Others)
+open-vue-app              Open Vue.js Application
 monitor-php-logs          Monitor PHP Logs
 monitor-db-logs           Monitor DB Logs
 monitor-vue-logs          Monitor Vue Logs
